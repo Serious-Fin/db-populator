@@ -1,5 +1,46 @@
 package parser
 
+import (
+	"strings"
+)
+
+func Parse(text string) Database {
+	db := Database{}
+
+	parseAll(&text, &db)
+
+	return db
+}
+
+func parseAll(text *string, db *Database) {
+	splitQueries := strings.Split(*text, ";")
+
+	for _, query := range splitQueries {
+		parseQuery(&query, db)
+	}
+}
+
+func parseQuery(query *string, db *Database) {
+	tokens := TokenizeQuery(*query)
+
+	if len(tokens) < 2 {
+		return
+	}
+
+	if tokens[1].Type != TABLE {
+		return
+	}
+
+	switch tokens[0].Type {
+	case CREATE:
+		handleCreate(&tokens, db)
+	}
+}
+
+func handleCreate(tokens *[]Token, db *Database) {
+	db.Tables = append(db.Tables, Table{Name: (*tokens)[2].Value})
+}
+
 type Database struct {
 	Tables []Table
 }
@@ -45,22 +86,3 @@ const (
 )
 
 type DataType string
-
-type Token struct {
-	Type  TokenType
-	Value string
-}
-
-const (
-	// Words
-	CREATE TokenType = "create"
-	TABLE  TokenType = "table"
-	NAME   TokenType = "name"
-
-	// Symbols
-	LPAREN    TokenType = "("
-	RPAREN    TokenType = ")"
-	SEMICOLON TokenType = ";"
-)
-
-type TokenType string

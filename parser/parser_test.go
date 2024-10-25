@@ -8,7 +8,7 @@ import (
 // Correctly parses create table query without columns defined
 func TestEmptyCreateQuery(t *testing.T) {
 	// Arrange
-	gotText := "CREATE TABLE Persons ();"
+	gotText := "CREATE TABLE MyTestTable ();"
 	want := Database{
 		Tables: []Table{
 			{
@@ -18,13 +18,9 @@ func TestEmptyCreateQuery(t *testing.T) {
 	}
 
 	// Act
-	got, err := Parse(gotText)
+	got := Parse(gotText)
 
 	// Assert
-	if err != nil {
-		t.Fatalf(`Method "Parse" returned an error: %v`, err)
-	}
-
 	assertDatabaseEquality(&want, &got, t)
 }
 

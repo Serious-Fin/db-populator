@@ -2,6 +2,7 @@ package parser
 
 import "testing"
 
+// should tokenize simple create query without column definitions
 func TestEmptyCreateQueryTokenization(t *testing.T) {
 	gotText := "CREATE TABLE Persons ();"
 	want := []Token{
@@ -10,13 +11,11 @@ func TestEmptyCreateQueryTokenization(t *testing.T) {
 		{Type: NAME, Value: "Persons"},
 		{Type: LPAREN, Value: "("},
 		{Type: RPAREN, Value: ")"},
+		{Type: SEMICOLON, Value: ";"},
+		{Type: END, Value: "0"},
 	}
 
-	gotTokens, err := TokenizeQuery(&gotText)
-
-	if err != nil {
-		t.Fatalf(`Method "TokenizeQuery" returned an error: %v`, err)
-	}
+	gotTokens := TokenizeQuery(gotText)
 
 	assertTokens(want, gotTokens, t)
 }

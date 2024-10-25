@@ -2,14 +2,10 @@ package main
 
 import (
 	"fmt"
-	"log"
-	parser "serious-fin/db-populator/ddl-parser"
+	parser "serious-fin/db-populator/parser"
 )
 
 func main() {
 	fmt.Println("Hello, world!")
-	_, err := parser.Parse("ola")
-	if err != nil {
-		log.Fatalf("An error occurred. Error: %v", err)
-	}
+	parser.Parse("ola")
 }
